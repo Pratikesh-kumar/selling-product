@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PKCART</title>
+</head>
+<body>
+    <h1> WELCOME</h1>
+    
+        <label for="name" > PRODUCT NAME</label>
+         <input type="text" name ='username'  id="NAME" required>
+         <label for="price">PRICE</label>
+         <input type="number" name ='price' id="pr">
+         <button type="submit" id="btn">submit</button>
+         
+          <ul id="user"> <h1><i>Products</i></h1></ul>
+          <div id="amount"><h4>amount till now</h4></div>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script>
+        const productname= document.getElementById('NAME');
+        const price= document.getElementById('pr');
+        const button =document.getElementById('btn');
+        const amount=document.getElementById('amount')
+
+        // adding to button:::
+
+        button.onclick=()=>{
+         
+            let obj={product:`${productname.value}`,pricing:`${price.value}`,calculate:`${amount.value}}
+
+            axios
+         .post('https://crudcrud.com/api/f9d004b5b039405a90c4bd8939ae2ff3/PKCART',obj)
+         .then((res)=>{
+                 onscreen(res.data)
+                  console.log(res.data)
+                })
+         .catch((err)=>{console.log(err)})
+       
+         
+         productname.value=""
+         price.value=""
+    
+
+         }
+         window.addEventListener("DOMContentLoaded", () => {
+        axios
+        .get('https://crudcrud.com/api/f9d004b5b039405a90c4bd8939ae2ff3/PKCART')
+        .then((res)=>{
+            for(var i=0;i<res.data.length;i++){
+                onscreen(res.data[i])
+            }
+        })
+        .catch((Err)=>console.log(Err))
+        
+       
+    });
+     function onscreen(object){
+        const parentnode=document.getElementById("user")
+         const childhtml=  `<li id="${object._id}"> ${object.product}---->${object.pricing}
+          <button onclick=deleteuser('${object._id}') >Delete</button>
+              </li>`
+              parentnode.innerHTML+=childhtml
+     }
+     function deleteuser(userid){
+        axios
+        .delete(`https://crudcrud.com/api/f9d004b5b039405a90c4bd8939ae2ff3/PKCART/${userid}`)
+         .then((res)=>{
+           removefromscreen(userid);
+       })
+       .catch(err=>console.log(err))
+     }
+     
+
+        function removefromscreen(userid)
+       {
+        const parentnode=document.getElementById('user');
+        const childnode=document.getElementById(userid);
+        if(childnode)
+        {
+        parentnode.removeChild(childnode);
+        }
+
+
+       }
+     
+         
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>
